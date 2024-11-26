@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
-
-	<!-- SqlSession setup for MyBatis Database Layer -->
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:/egovframework/sqlmap/example/sql-mapper-config.xml" />
-		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/example/mappers/*.xml" />
-	</bean>
-
-	<!-- MapperConfigurer setup for MyBatis Database Layer with @Mapper("deptMapper") in DeptMapper Interface -->
- 	<bean class="egovframework.rte.psl.dataaccess.mapper.MapperConfigurer">
-		<property name="basePackage" value="egovframework.example.sample.service.impl" />
-	</bean>
-    
-</beans>
+<beans:beans 
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+	<beans:bean id="sqlSessionLogin" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="configLocation" value="classpath:/egovframework/sqlmap/config/sql-mapper-config.xml" />
+		<!-- <beans:property name="mapperLocations" value="classpath:/egovframework/sqlmap/sql/login/Login.xml" /> -->
+	</beans:bean>
+	<!-- 
+ 	<beans:bean class="egovframework.rte.psl.dataaccess.mapper.MapperConfigurer" >
+		<beans:property name="basePackage" value="egovframework.com.web.login.service.mapper"/>
+		<beans:property name="sqlSessionFactoryBeanName" value="sqlSessionLogin" />
+	</beans:bean>
+	 -->
+	 
+	<!-- MyBatis 매퍼 자동 등록 -->
+    <beans:bean class="egovframework.rte.psl.dataaccess.mapper.MapperConfigurer">
+        <beans:property name="basePackage" value="egovframework.org.zerock.mapper" />
+        <beans:property name="sqlSessionFactoryBeanName" value="sqlSession" />
+    </beans:bean>
+	
+	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="configLocation" value="classpath:/egovframework/sqlmap/config/sql-mapper-config.xml" />
+		<beans:property name="mapperLocations">
+			<beans:list>
+				<beans:value>classpath:/egovframework/sqlmap/sql/**/*.xml</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+</beans:beans>
